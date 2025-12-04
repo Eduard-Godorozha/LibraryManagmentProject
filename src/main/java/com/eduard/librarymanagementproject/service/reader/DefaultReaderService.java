@@ -1,4 +1,4 @@
-package com.eduard.librarymanagementproject.service.Reader;
+package com.eduard.librarymanagementproject.service.reader;
 
 import com.eduard.librarymanagementproject.model.entity.Reader;
 import com.eduard.librarymanagementproject.repository.ReaderRepository;

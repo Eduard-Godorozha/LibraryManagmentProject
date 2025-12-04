@@ -31,7 +31,7 @@ public class BookDto {
     @Max(2100)
     private Integer yearOfPublication;
 
-    @Positive
+    @PositiveOrZero
     private Integer numberOfCopies;
 
     @NotNull

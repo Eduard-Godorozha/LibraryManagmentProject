@@ -38,5 +38,5 @@ public class Book {
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private BookStatus status = BookStatus.AVAILABLE;
+    private BookStatus status;
 }
