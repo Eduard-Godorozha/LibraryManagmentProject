@@ -2,12 +2,9 @@ package com.eduard.librarymanagementproject.web.dto;
 
 import com.eduard.librarymanagementproject.model.BookStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import org.hibernate.validator.constraints.ISBN;
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import org.hibernate.validator.constraints.ISBN;
 
 @Data
 public class BookDto {
@@ -21,7 +18,7 @@ public class BookDto {
     @NotBlank
     private String author;
 
-    @ISBN
+    @ISBN(type = org.hibernate.validator.constraints.ISBN.Type.ISBN_10)
     @NotBlank
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String ISBN;
@@ -29,9 +26,11 @@ public class BookDto {
     @Positive
     @Min(1900)
     @Max(2100)
+    @NotNull
     private Integer yearOfPublication;
 
     @PositiveOrZero
+    @NotNull
     private Integer numberOfCopies;
 
     @NotNull

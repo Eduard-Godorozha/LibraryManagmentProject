@@ -16,14 +16,13 @@ public class LoanBookDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
-    @NotNull
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime issueDate;
 
     @NotNull
     @Future
     private LocalDateTime dueDate;
 
-    @NotNull
     LocalDateTime returnDate;
 
     @NotNull

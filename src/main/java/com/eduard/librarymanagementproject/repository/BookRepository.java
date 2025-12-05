@@ -3,12 +3,13 @@ package com.eduard.librarymanagementproject.repository;
 import com.eduard.librarymanagementproject.model.entity.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    Optional<Book> findByName(String name);
+    List<Book> findByNameContainingIgnoreCase(String name);
 
-    Optional<Book> findByISBN(String isbn);
+    Optional<Book> findByIsbn(String isbn);
 
 }

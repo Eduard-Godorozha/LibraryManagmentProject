@@ -30,6 +30,15 @@ public class BookController {
         return bookMapper.toDto(bookService.getBookById(id));
     }
 
+    @GetMapping("/search")
+    public List<BookDto> searchBooks(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String isbn) {
+
+        List<Book> books = bookService.getByNameOrIsbn(name, isbn);
+        return bookMapper.toDto(books);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BookDto createBook(@RequestBody @Valid BookDto bookDto) {
@@ -39,7 +48,6 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
     public BookDto updateBook(@PathVariable Long id, @RequestBody @Valid BookDto bookDto) {
         Book book = bookMapper.toEntity(bookDto);
         book = bookService.updateBook(id, book);

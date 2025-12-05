@@ -10,6 +10,7 @@ import com.eduard.librarymanagementproject.repository.ReaderRepository;
 import com.eduard.librarymanagementproject.service.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,6 +26,7 @@ public class DefaultLoanBookService implements LoanBookService {
     private final BookRepository bookRepository;
 
     @Override
+    @Transactional
     public LoanBook loanBook(Long readerId, Long bookId, LocalDateTime dueDate) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new ResourceNotFoundException("Book not found"));
@@ -33,7 +35,7 @@ public class DefaultLoanBookService implements LoanBookService {
                 .orElseThrow(() -> new ResourceNotFoundException("Reader not found"));
 
         if (book.getNumberOfCopies() == 0){
-            throw new ResourceNotFoundException("No copies available for this book");
+            throw new IllegalStateException("No copies available for this book");
         }
 
         int remainingCopies = book.getNumberOfCopies() - 1;
@@ -51,18 +53,20 @@ public class DefaultLoanBookService implements LoanBookService {
     }
 
     @Override
+    @Transactional
     public LoanBook returnBook(Long loanId) {
         LoanBook loan = loanBookRepository.findById(loanId)
                 .orElseThrow(() -> new RuntimeException("Loan not found"));
 
         if (loan.getReturnDate() != null){
-            throw new RuntimeException("Book already returned");
+            throw new IllegalStateException("Book already returned");
         }
         loan.setReturnDate(LocalDateTime.now());
 
         Book book = loan.getBook();
-        book.setNumberOfCopies(book.getNumberOfCopies() + 1);
-        book.setStatus(BookStatus.AVAILABLE);
+        int newCount = book.getNumberOfCopies() + 1;
+        book.setNumberOfCopies(newCount);
+        book.setStatus(newCount > 0 ? BookStatus.AVAILABLE : BookStatus.ISSUED);
         bookRepository.save(book);
 
         return loanBookRepository.save(loan);

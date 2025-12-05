@@ -2,10 +2,7 @@ package com.eduard.librarymanagementproject.web.dto;
 
 import com.eduard.librarymanagementproject.model.ReaderStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
@@ -31,6 +28,7 @@ public class ReaderDto {
     private String email;
 
     @NotBlank
+    @Pattern(regexp = "\\+[1-9]\\d{1,14}")
     private String phoneNumber;
 
     @PastOrPresent

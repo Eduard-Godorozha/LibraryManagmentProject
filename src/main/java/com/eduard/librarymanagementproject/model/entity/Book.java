@@ -1,13 +1,11 @@
 package com.eduard.librarymanagementproject.model.entity;
 
 import com.eduard.librarymanagementproject.model.BookStatus;
-import com.eduard.librarymanagementproject.model.ReaderStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.ISBN;
 
 @Entity
 @Table(name = "books")
@@ -27,8 +25,8 @@ public class Book {
     @Column(name = "author")
     private String author;
 
-    @Column(name = "isbn")
-    private String ISBN;
+    @Column(name = "isbn", unique = true)
+    private String isbn;
 
     @Column(name = "year_of_publication")
     private Integer yearOfPublication;

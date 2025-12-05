@@ -20,15 +20,18 @@ public class DefaultBookService implements BookService{
     }
 
     @Override
-    public Book getBookByName(String name) {
-        return bookRepository.findByName(name)
-                .orElseThrow(() -> new ResourceNotFoundException("Book not found"));
-    }
+    public List<Book> getByNameOrIsbn(String name, String isbn) {
+        if (isbn != null && !isbn.isBlank()) {
+            Book book = bookRepository.findByIsbn(isbn)
+                    .orElseThrow(() -> new ResourceNotFoundException("Book not found"));
+            return List.of(book);
+        }
 
-    @Override
-    public Book getBookByISBN(String isbn) {
-        return bookRepository.findByISBN(isbn)
-                .orElseThrow(() -> new ResourceNotFoundException("Book not found"));
+        if (name != null && !name.isBlank()) {
+            return bookRepository.findByNameContainingIgnoreCase(name);
+        }
+
+        return bookRepository.findAll();
     }
 
     @Override

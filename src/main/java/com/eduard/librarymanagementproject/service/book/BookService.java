@@ -9,9 +9,7 @@ public interface BookService {
 
     Book getBookById(Long id);
 
-    Book getBookByName(String name);
-
-    Book getBookByISBN(String isbn);
+    List<Book> getByNameOrIsbn(String name, String isbn);
 
     List<Book> getAllBooks();
 
