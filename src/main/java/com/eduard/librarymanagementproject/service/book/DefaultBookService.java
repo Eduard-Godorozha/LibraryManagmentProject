@@ -1,5 +1,6 @@
 package com.eduard.librarymanagementproject.service.book;
 
+import com.eduard.librarymanagementproject.model.BookStatus;
 import com.eduard.librarymanagementproject.model.entity.Book;
 import com.eduard.librarymanagementproject.repository.BookRepository;
 import com.eduard.librarymanagementproject.service.exceptions.ResourceNotFoundException;
@@ -51,6 +52,11 @@ public class DefaultBookService implements BookService{
 
         updatedBook.setName(book.getName());
         updatedBook.setAuthor(book.getAuthor());
+        updatedBook.setStatus(
+                book.getNumberOfCopies() > 0
+                        ? BookStatus.AVAILABLE
+                        : BookStatus.ISSUED
+        );
         updatedBook.setNumberOfCopies(book.getNumberOfCopies());
         updatedBook.setYearOfPublication(book.getYearOfPublication());
 
@@ -59,6 +65,9 @@ public class DefaultBookService implements BookService{
 
     @Override
     public void deleteBookById(Long id) {
+        if (!bookRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Book not found");
+        }
         bookRepository.deleteById(id);
     }
 }

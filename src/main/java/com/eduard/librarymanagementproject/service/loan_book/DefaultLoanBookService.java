@@ -7,6 +7,8 @@ import com.eduard.librarymanagementproject.model.entity.Reader;
 import com.eduard.librarymanagementproject.repository.BookRepository;
 import com.eduard.librarymanagementproject.repository.LoanBookRepository;
 import com.eduard.librarymanagementproject.repository.ReaderRepository;
+import com.eduard.librarymanagementproject.service.exceptions.BookAlreadyReturnedException;
+import com.eduard.librarymanagementproject.service.exceptions.BookNotAvailableException;
 import com.eduard.librarymanagementproject.service.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,7 +37,7 @@ public class DefaultLoanBookService implements LoanBookService {
                 .orElseThrow(() -> new ResourceNotFoundException("Reader not found"));
 
         if (book.getNumberOfCopies() == 0){
-            throw new IllegalStateException("No copies available for this book");
+            throw new BookNotAvailableException("No copies available for this book");
         }
 
         int remainingCopies = book.getNumberOfCopies() - 1;
@@ -56,10 +58,10 @@ public class DefaultLoanBookService implements LoanBookService {
     @Transactional
     public LoanBook returnBook(Long loanId) {
         LoanBook loan = loanBookRepository.findById(loanId)
-                .orElseThrow(() -> new RuntimeException("Loan not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Loan not found"));
 
         if (loan.getReturnDate() != null){
-            throw new IllegalStateException("Book already returned");
+            throw new BookAlreadyReturnedException("Book already returned");
         }
         loan.setReturnDate(LocalDateTime.now());
 

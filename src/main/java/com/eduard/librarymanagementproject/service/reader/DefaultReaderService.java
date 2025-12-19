@@ -12,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DefaultReaderService implements ReaderService {
 
-    ReaderRepository readerRepository;
+    private final ReaderRepository readerRepository;
 
     @Override
     public Reader getReaderById(Long id) {
@@ -32,7 +32,7 @@ public class DefaultReaderService implements ReaderService {
 
     @Override
     public Reader updateReader(Long id, Reader reader) {
-        Reader newReader = readerRepository.findById(reader.getId())
+        Reader newReader = readerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reader not found"));
 
         newReader.setName(reader.getName());
@@ -44,6 +44,9 @@ public class DefaultReaderService implements ReaderService {
 
     @Override
     public void deleteReader(Long id) {
+        if (!readerRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Reader not found");
+        }
         readerRepository.deleteById(id);
     }
 }

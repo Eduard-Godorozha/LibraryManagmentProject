@@ -7,6 +7,7 @@ import com.eduard.librarymanagementproject.web.dto.LoanBookDto;
 import com.eduard.librarymanagementproject.web.dto.ReaderDto;
 import com.eduard.librarymanagementproject.web.mapper.LoanBookMapper;
 import com.eduard.librarymanagementproject.web.mapper.ReaderMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +32,7 @@ public class LoanBookController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public LoanBookDto bookIssuance(@RequestBody LoanBookDto loanBookDto){
+    public LoanBookDto issueBook(@Valid @RequestBody LoanBookDto loanBookDto){
         LoanBook saved = loanBookService.loanBook(
                 loanBookDto.getReader().getId(),
                 loanBookDto.getBook().getId(),
